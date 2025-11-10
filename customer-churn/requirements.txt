@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+flask
+joblib
+flask-cors
+
+# Install with:
+#   pip install -r requirements.txt
