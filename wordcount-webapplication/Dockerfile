@@ -1,13 +1,14 @@
-FROM node:18-alpine
-WORKDIR /app
+# Use Tomcat with Java 17
+FROM tomcat:9-jdk17
 
-# Install dependencies
-COPY package.json ./
-RUN npm install --production
+# Clean default Tomcat apps
+RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy app
-COPY . ./
+# Copy the built WAR file from your Maven project
+COPY java-maven-webapp/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
-EXPOSE 3000
-ENV NODE_ENV=production
-CMD ["npm", "start"]
+# Expose Tomcat port
+EXPOSE 8080
+
+# Start Tomcat
+CMD ["catalina.sh", "run"]
