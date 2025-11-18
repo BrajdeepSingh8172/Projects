@@ -1,0 +1,64 @@
+pipeline {
+  agent any
+
+  environment {
+    IMAGE_NAME = "${env.DOCKER_REGISTRY ?: 'local'}/java-maven-webapp"
+    // Optionally set DOCKER_REGISTRY as a Jenkins credential or pipeline parameter
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build WAR') {
+      steps {
+        echo 'Building WAR with Maven'
+        sh 'mvn -B -DskipTests clean package'
+      }
+      post {
+        always {
+          archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+        }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        script {
+          def imageTag = "${env.BUILD_ID}-${env.GIT_COMMIT ?: 'local'}"
+          sh "docker build -t ${IMAGE_NAME}:${imageTag} -f Dockerfile ."
+          // Tag latest too
+          sh "docker tag ${IMAGE_NAME}:${imageTag} ${IMAGE_NAME}:latest || true"
+          // Optionally push (requires docker login credentials setup in Jenkins)
+          // withCredentials(...) { sh 'docker push ...' }
+          env.IMAGE_TAG = imageTag
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        echo 'Deploying Docker container (local host)'
+        script {
+          def containerName = "java-webapp-${env.BUILD_ID}"
+          // Stop and remove any existing container with same name
+          sh "docker rm -f ${containerName} || true"
+          // Run new container
+          sh "docker run -d --name ${containerName} -p 8080:8080 ${IMAGE_NAME}:${env.IMAGE_TAG}"
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Build and deploy finished. Visit http://<jenkins-host>:8080/"
+    }
+    failure {
+      echo 'Pipeline failed'
+    }
+  }
+}

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Word Count Analyzer</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <div class="header-content">
+          <h1 class="logo">📝 Word Count Analyzer</h1>
+          <p class="tag">Fast, accurate, and beautiful text analysis</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap main">
+      <div class="container">
+        <section class="card input-card">
+          <h2 class="card-title">✍️ Enter Your Text</h2>
+          <textarea id="text" placeholder="Paste or type your text here... Start typing to see live updates!">This is a simple Word Count Web Application.</textarea>
+          
+          <div class="button-group">
+            <button id="countBtn" class="btn btn-primary">
+              <span>Count</span>
+            </button>
+            <button id="clearBtn" class="btn btn-secondary">
+              <span>Clear</span>
+            </button>
+            <button id="copyBtn" class="btn btn-secondary" title="Copy statistics">
+              <span>Copy Stats</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+              <div class="stat-label">Words</div>
+              <div class="stat-value" id="wordCount">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🔤</div>
+            <div class="stat-content">
+              <div class="stat-label">Characters</div>
+              <div class="stat-value" id="charCount">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⬜</div>
+            <div class="stat-content">
+              <div class="stat-label">Spaces</div>
+              <div class="stat-value" id="spaceCount">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📄</div>
+            <div class="stat-content">
+              <div class="stat-label">Sentences</div>
+              <div class="stat-value" id="sentenceCount">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📏</div>
+            <div class="stat-content">
+              <div class="stat-label">Avg. Word Length</div>
+              <div class="stat-value" id="avgLength">0</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📈</div>
+            <div class="stat-content">
+              <div class="stat-label">Paragraphs</div>
+              <div class="stat-value" id="paragraphCount">0</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p class="footer-text">✨ Built with care by Brajdeep Singh</p>
+        <p class="footer-subtext">Real-time text analysis • Unicode-aware counting</p>
+      </div>
+    </footer>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

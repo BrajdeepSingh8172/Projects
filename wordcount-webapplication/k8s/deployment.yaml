@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordcount-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: wordcount
+  template:
+    metadata:
+      labels:
+        app: wordcount
+    spec:
+      containers:
+        - name: wordcount
+          image: ghcr.io/<OWNER>/<REPO>:latest # replace with your image
+          ports:
+            - containerPort: 3000

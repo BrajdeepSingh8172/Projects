@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: wordcount-rollout
+  labels:
+    app: wordcount
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wordcount
+  template:
+    metadata:
+      labels:
+        app: wordcount
+        version: stable
+    spec:
+      containers:
+        - name: wordcount
+          image: ghcr.io/<OWNER>/<REPO>:latest # replace with your image or tag
+          ports:
+            - containerPort: 3000
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: {duration: 10s}
+        - setWeight: 50
+        - pause: {duration: 10s}
+        - setWeight: 100
+
+# Notes:
+# - This manifest requires Argo Rollouts controller installed in the cluster.
+# - Replace the image placeholder with the image pushed by CI (e.g. ghcr.io/OWNER/REPO:${{ github.sha }}).
+# - Adjust weights/durations for your environment.
