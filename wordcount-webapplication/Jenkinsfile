@@ -12,25 +12,30 @@ pipeline {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/BrajdeepSingh8172/Projects.git',
-                    credentialsId: 'your-github-credential-id'
+                    credentialsId: 'github-token'   // ← your actual credential ID
             }
         }
 
         stage('Build WAR') {
             steps {
-                sh "mvn -f wordcount-webapplication/java-maven-webapp/pom.xml clean package"
+                bat "mvn -f wordcount-webapplication/java-maven-webapp/pom.xml clean package"
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t wordcount-app ./wordcount-webapplication"
+                bat "docker build -t wordcount-app ./wordcount-webapplication"
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh "docker run -d -p 8081:8080 --name wordcount-container wordcount-app || true"
+
+                // Stop & remove old container safely
+                bat "docker rm -f wordcount-container || exit 0"
+
+                // Run new container on port 8081
+                bat "docker run -d -p 8081:8080 --name wordcount-container wordcount-app"
             }
         }
     }
